@@ -11,6 +11,22 @@
 - **핵심 기능 2 (의미 기반 하이브리드 RAG 검색)**: 자연어 질의 기반 임베딩과 메타데이터 필터를 활용하여 목표치(Recall@5 0.85)를 만족하는 높은 품질의 유사 민원 검색
 - **핵심 기능 3 (출처 하이라이팅 답변 생성)**: 검색된 청크(Chunk)를 기반으로 로컬 LLM이 환각 없이 요약/답변을 생성하고, 사용자가 신뢰할 수 있도록 답변에 출처와 원문 일부를 하이라이트 제공
 
+## 🎯 목표 및 지표 (KPIs & Success Criteria)
+- **구조화 품질**: Observation/Result/Request/Context 필드 단위 F1 Score 0.80 이상
+- **검색 품질**: Top-5 Recall@5 0.85 이상
+- **응답 지연 (End-to-End)**: 추론 지연시간 8초 이하 (로컬 환경 기준)
+- **출처 정확성**: 답변 내 인용 근거가 실제 청크와 일치하는 비율 0.90 이상
+
+## 👤 타겟 사용자 (Target Audience)
+- **메인 사용자**: 민원 담당 공무원 (빠른 민원 요지 파악, 유사 사례 탐색, 답변 초안 작성)
+- **서브 사용자**: 정책/기획 관리자 (민원 트렌드 분석 및 정책 반영 인사이트 확보)
+
+## 👥 팀 구성 및 역할 (Team Roles)
+- **Frontend Engineer (1명)**: UI/UX, 사용자 플로우, 시각화, 데모 스토리
+- **Backend Engineer A (1명)**: 데이터 파이프라인/스키마/전처리
+- **Backend Engineer B (1명)**: 검색/벡터DB/평가 파이프라인
+- **Backend Engineer C (1명)**: LLM 서빙/RAG/API/성능최적화
+
 ## 📚 기술 스택 (Tech Stack)
 - **Frontend**: Streamlit
 - **Backend / API**: FastAPI, Python

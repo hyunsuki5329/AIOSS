@@ -7,6 +7,28 @@
 - 근거 기반 답변 생성 (RAG) // Ollama 및 로컬 sLLM 기반으로 근거 문구 및 출처 청크 ID를 하이라이팅하여 환각을 방지하고 설명 가능성(XAI) 부여
 - 사용자 친화적 데모 UI // Streamlit을 통해 민원 업로드 및 구조화 결과 확인, 질의응답 챗 인터페이스, 관리자용 통계 대시보드를 시각적으로 제공
 
+## 🏗️ System Architecture
+- **Ingestion Layer**: 원천 민원 수집, 정제, 익명화
+- **NLP Structuring Layer**: 4요소 추출 + NER + 스키마 검증
+- **Retrieval Layer**: 임베딩 생성, 벡터 인덱싱, 필터 검색
+- **Generation Layer**: RAG 프롬프트, Ollama 추론, 근거 첨부
+- **Presentation Layer**: Streamlit UI, 통계 대시보드
+
+## 🛠️ Tech Stack
+- **LLM / 추론**: Ollama + Qwen2.5 7B Instruct (4-bit QLoRA/GGUF 권장)
+- **NLP / 구조화**: Transformers + Prompt 기반 추출
+- **임베딩 / Vector DB**: BGE-m3 / ChromaDB (또는 FAISS)
+- **Backend API**: FastAPI, Python 3.10+
+- **Frontend**: Streamlit
+
+## 🔌 API Endpoints
+- `POST /api/v1/ingest`: 민원 원문 업로드 및 배치 적재
+- `POST /api/v1/structure`: 4요소 구조화 및 NER 추출
+- `POST /api/v1/index`: 임베딩 및 인덱스 생성
+- `POST /api/v1/search`: 시맨틱 벡터 기반 하이브리드 검색
+- `POST /api/v1/qa`: RAG 기반 질의응답 (근거 하이라이팅 포함)
+- `GET /api/v1/health`: 모델/인덱스 상태 확인
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -16,14 +38,14 @@
 - 권장 하드웨어: VRAM 6GB 이상 또는 RAM 16GB 이상 (4-bit 양자화 기준)
 
 ### Installation
-```bash
+\`\`\`bash
 git clone https://github.com/hyunsuki5329/AIOSS.git
 cd AIOSS
 pip install -r requirements.txt
-```
+\`\`\`
 
 ### Usage
-```bash
+\`\`\`bash
 # 1. 로컬 LLM 서빙 엔진 실행 (백그라운드)
 ollama serve
 
@@ -35,13 +57,13 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 # 4. 프론트엔드 UI 실행 (Streamlit)
 streamlit run frontend/app.py
-```
+\`\`\`
 
 ## 🧪 Testing
-```bash
+\`\`\`bash
 # 오프라인 평가: 구조화 필드 F1 Score, 검색 Recall@5, 질의 지연시간 검증
 pytest tests/
-```
+\`\`\`
 
 ## 📝 License
 MIT License
