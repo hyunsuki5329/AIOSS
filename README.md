@@ -16,14 +16,14 @@
 - 권장 하드웨어: VRAM 6GB 이상 또는 RAM 16GB 이상 (4-bit 양자화 기준)
 
 ### Installation
-\`\`\`bash
+```bash
 git clone https://github.com/hyunsuki5329/AIOSS.git
 cd AIOSS
 pip install -r requirements.txt
-\`\`\`
+```
 
 ### Usage
-\`\`\`bash
+```bash
 # 1. 로컬 LLM 서빙 엔진 실행 (백그라운드)
 ollama serve
 
@@ -35,13 +35,13 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 # 4. 프론트엔드 UI 실행 (Streamlit)
 streamlit run frontend/app.py
-\`\`\`
+```
 
 ## 🧪 Testing
-\`\`\`bash
+```bash
 # 오프라인 평가: 구조화 필드 F1 Score, 검색 Recall@5, 질의 지연시간 검증
 pytest tests/
-\`\`\`
+```
 
 ## 📝 License
 MIT License
