@@ -1,0 +1,68 @@
+# .github/workflows/metrics.yml
+name: Collect DORA Metrics
+
+on:
+  workflow_dispatch:
+    inputs:
+      window_days:
+        description: Number of days to include in metrics window
+        required: false
+        default: "7"
+  schedule:
+    - cron: "0 0 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  dora-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Collect DORA metrics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          DORA_WINDOW_DAYS: ${{ github.event.inputs.window_days || '7' }}
+        run: node scripts/dora-metrics.mjs
+
+      - name: Upload DORA JSON artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dora-metrics
+          path: artifacts/dora-metrics.json
+
+      - name: Upload weekly markdown report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dora-weekly-report
+          path: artifacts/weekly-report.md
+
+      - name: Update dashboard sample data
+        run: |
+          mkdir -p dashboard
+          cp artifacts/dashboard-data.json dashboard/sample-dora-metrics.json
+
+      - name: Commit weekly report and dashboard sample
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p reports
+          cp artifacts/weekly-report.md reports/weekly-dora-report.md
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/weekly-dora-report.md dashboard/sample-dora-metrics.json
+          if git diff --cached --quiet; then
+            echo "No report changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(metrics): update weekly DORA report"
+          git push

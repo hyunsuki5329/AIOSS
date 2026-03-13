@@ -22,6 +22,24 @@ cd AIOSS
 pip install -r requirements.txt
 ```
 
+### Monitoring with Docker Compose (Prometheus + Grafana)
+```bash
+# Run monitoring stack in background
+docker compose up -d
+
+# Check status
+docker compose ps
+
+# Stop monitoring stack
+docker compose down
+```
+
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000
+- Grafana default account: `admin` / `admin`
+- Grafana starts with Prometheus datasource auto-provisioned (name: `Prometheus`)
+- Grafana starts with dashboard auto-provisioned and set as home: `Prometheus Overview`
+
 ### Usage
 ```bash
 # 1. 로컬 LLM 서빙 엔진 실행 (백그라운드)
@@ -41,6 +59,48 @@ streamlit run frontend/app.py
 ```bash
 # 오프라인 평가: 구조화 필드 F1 Score, 검색 Recall@5, 질의 지연시간 검증
 pytest tests/
+```
+
+## 📊 DORA Metrics Automation (GitHub Actions)
+
+자동 수집 대상 지표:
+- Lead Time for Changes
+- Deployment Frequency
+- Mean Time to Recovery (MTTR)
+- Change Failure Rate (CFR)
+
+워크플로우:
+- `.github/workflows/metrics.yml`
+
+실행 방식:
+- 매주 월요일 00:00 UTC 자동 실행 (`schedule`)
+- 수동 실행 (`workflow_dispatch`, `window_days` 입력 가능)
+
+산출물:
+- JSON 아티팩트: `artifacts/dora-metrics.json`
+- 주간 보고서 아티팩트: `artifacts/weekly-report.md`
+- 대시보드 데이터: `artifacts/dashboard-data.json`
+
+선택 과제 반영:
+- 주간 실행 시 `reports/weekly-dora-report.md` 자동 갱신/커밋
+- 대시보드 샘플 데이터 `dashboard/sample-dora-metrics.json` 자동 갱신/커밋
+
+## 🖼 Dashboard Draft / Result
+
+대시보드 구현 파일:
+- `dashboard/index.html` (Chart.js 기반)
+- `dashboard/sample-dora-metrics.json` (렌더링 데이터)
+
+README 첨부용 시안 이미지:
+
+![DORA Dashboard Preview](docs/images/dora-dashboard-preview.svg)
+
+로컬에서 대시보드 확인:
+
+```bash
+# 정적 파일 서버 예시 (Python)
+python -m http.server 8080
+# 브라우저 접속: http://localhost:8080/dashboard/
 ```
 
 ## 📝 License
