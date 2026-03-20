@@ -15,7 +15,7 @@ on:
 permissions:
   contents: read
   issues: write
-  projects: write
+  repository-projects: write
 
 jobs:
   setup-project:
@@ -30,7 +30,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          .\.github\workflows\scripts\bootstrap-github-project.ps1 `
+          .\scripts\bootstrap-github-project.ps1 `
             -Repo "${{ github.repository }}" `
             -Token ${{ secrets.GITHUB_TOKEN }}
 
