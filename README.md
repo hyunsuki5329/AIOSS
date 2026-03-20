@@ -85,6 +85,13 @@ pytest tests/
 - 주간 실행 시 `reports/weekly-dora-report.md` 자동 갱신/커밋
 - 대시보드 샘플 데이터 `dashboard/sample-dora-metrics.json` 자동 갱신/커밋
 
+## 🗂 GitHub Project Sprint Backlog Setup
+
+과제용 GitHub Project/이슈 템플릿/라벨/마일스톤/백로그 자동 생성과
+선택과제(Cycle Time, Velocity, Burndown) 분석 절차는 아래 가이드를 참고하세요.
+
+- `docs/github-project-sprint-guide.md`
+
 ## 🖼 Dashboard Draft / Result
 
 대시보드 구현 파일:

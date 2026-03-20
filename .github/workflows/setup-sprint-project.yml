@@ -1,0 +1,62 @@
+name: Setup GitHub Project & Sprint Metrics
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action to perform'
+        required: true
+        default: 'setup-project'
+        type: choice
+        options:
+          - setup-project
+          - generate-metrics
+
+permissions:
+  contents: read
+  issues: write
+  projects: write
+
+jobs:
+  setup-project:
+    if: ${{ github.event.inputs.action == 'setup-project' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup GitHub Project, Labels, Milestones & Issues
+        shell: pwsh
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          .\.github\workflows\scripts\bootstrap-github-project.ps1 `
+            -Repo "${{ github.repository }}" `
+            -Token ${{ secrets.GITHUB_TOKEN }}
+
+  generate-metrics:
+    if: ${{ github.event.inputs.action == 'generate-metrics' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Generate Sprint Metrics (Cycle Time, Velocity, Burndown)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node ./scripts/sprint-metrics.mjs
+      
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sprint-metrics
+          path: artifacts/
+          retention-days: 30
+      
+      - name: Display Report
+        run: cat artifacts/sprint-metrics-report.md 2>/dev/null || echo "No report generated"

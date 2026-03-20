@@ -1,0 +1,52 @@
+name: Collect Sprint Metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  sprint-metrics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Generate cycle time / velocity / burndown
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/sprint-metrics.mjs
+
+      - name: Upload sprint metrics artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sprint-metrics
+          path: |
+            artifacts/sprint-metrics.json
+            artifacts/sprint-metrics-report.md
+
+      - name: Commit latest sprint report
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p reports
+          cp artifacts/sprint-metrics-report.md reports/weekly-sprint-metrics-report.md
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add reports/weekly-sprint-metrics-report.md
+          if git diff --cached --quiet; then
+            echo "No report changes to commit"
+            exit 0
+          fi
+          git commit -m "chore(metrics): update sprint metrics report"
+          git push

@@ -1,0 +1,64 @@
+name: Bug Report
+description: 버그를 보고하고 재현 정보를 남깁니다.
+title: "[Bug] "
+labels:
+  - type/bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        감사합니다. 아래 정보를 작성해주시면 빠르게 대응할 수 있습니다.
+  - type: textarea
+    id: summary
+    attributes:
+      label: 버그 요약
+      description: 무엇이 잘못되었는지 한 줄로 설명해주세요.
+      placeholder: 예) 대시보드에서 MTTR 값이 NaN으로 표시됩니다.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 절차
+      description: 재현 가능한 순서대로 작성해주세요.
+      placeholder: |
+        1. docker compose up -d 실행
+        2. Grafana 대시보드 접속
+        3. 특정 패널 열기
+        4. 오류 확인
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 동작
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: 실제 동작
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: 심각도
+      options:
+        - severity/critical
+        - severity/high
+        - severity/medium
+        - severity/low
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 환경 정보
+      description: OS, 브랜치, 커밋, 브라우저/런타임 버전 등
+      placeholder: Windows 11 / main / abc123 / Chrome 133
+  - type: textarea
+    id: logs
+    attributes:
+      label: 로그/스크린샷
+      description: 오류 로그, 스크린샷, 관련 링크를 첨부해주세요.

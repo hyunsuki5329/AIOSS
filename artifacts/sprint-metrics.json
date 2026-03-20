@@ -1,0 +1,81 @@
+{
+  "generatedAt": "2026-03-20T13:40:00Z",
+  "dataSource": "GitHub Sprint Board (Demo)",
+  "cycleTime": {
+    "sampleSize": 4,
+    "averageDays": 7.5,
+    "issues": [
+      {
+        "number": 1,
+        "title": "[Sprint1] Grafana Dashboard Panel Fix",
+        "cycleDays": 7.0
+      },
+      {
+        "number": 2,
+        "title": "[Sprint1] Prometheus Scrape Alert",
+        "cycleDays": 9.0
+      },
+      {
+        "number": 3,
+        "title": "[Sprint1] DORA Metrics Exception",
+        "cycleDays": 10.0
+      },
+      {
+        "number": 4,
+        "title": "[Sprint1] Auto Failure Classification",
+        "cycleDays": 7.0
+      }
+    ]
+  },
+  "velocity": {
+    "milestones": [
+      {
+        "sprint": "Sprint 1 (2026-03-20 ~ 2026-04-02)",
+        "totalIssues": 5,
+        "closedIssues": 4,
+        "committedPoints": 18,
+        "completedPoints": 12,
+        "velocityPercent": 66.7
+      },
+      {
+        "sprint": "Sprint 2 (2026-04-03 ~ 2026-04-16)",
+        "totalIssues": 7,
+        "closedIssues": 0,
+        "committedPoints": 22,
+        "completedPoints": 0,
+        "velocityPercent": 0
+      }
+    ]
+  },
+  "burndown": {
+    "sprint": "Sprint 1 (2026-03-20 ~ 2026-04-02)",
+    "totalPoints": 18,
+    "points": [
+      { "date": "2026-03-20", "remainingPoints": 18.0 },
+      { "date": "2026-03-21", "remainingPoints": 18.0 },
+      { "date": "2026-03-22", "remainingPoints": 16.0 },
+      { "date": "2026-03-23", "remainingPoints": 16.0 },
+      { "date": "2026-03-24", "remainingPoints": 14.0 },
+      { "date": "2026-03-25", "remainingPoints": 14.0 },
+      { "date": "2026-03-26", "remainingPoints": 12.0 },
+      { "date": "2026-03-27", "remainingPoints": 12.0 },
+      { "date": "2026-03-28", "remainingPoints": 10.0 },
+      { "date": "2026-03-29", "remainingPoints": 10.0 },
+      { "date": "2026-03-30", "remainingPoints": 8.0 },
+      { "date": "2026-03-31", "remainingPoints": 8.0 },
+      { "date": "2026-04-01", "remainingPoints": 4.0 },
+      { "date": "2026-04-02", "remainingPoints": 0.0 }
+    ]
+  },
+  "analysis": {
+    "cycleTimeInsight": "Average 7.5 days is good for sprint tasks. Team can close issues within 1-2 weeks.",
+    "velocityInsight": "Sprint 1 achieved 66.7% velocity. Team underestimated or faced blockers. Sprint 2 increased commitment to 22 points.",
+    "burndownInsight": "Steady linear burndown indicates consistent team velocity. 6 points could not be completed (70% issues completed).",
+    "recommendations": [
+      "Improve estimation accuracy to match actual points completed",
+      "Investigate bottlenecks that prevent reaching 100% sprint goal",
+      "Maintain current cycle time (7.5 days) as baseline",
+      "Plan Sprint 2 with 75%+ velocity target (17-19 points)"
+    ]
+  }
+}

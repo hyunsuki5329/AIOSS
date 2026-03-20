@@ -1,0 +1,62 @@
+name: Feature Request
+description: 신규 기능 또는 개선 아이디어를 제안합니다.
+title: "[Feature] "
+labels:
+  - type/feature
+body:
+  - type: markdown
+    attributes:
+      value: |
+        문제와 기대 효과를 함께 적어주세요. 스프린트 우선순위에 반영합니다.
+  - type: textarea
+    id: problem
+    attributes:
+      label: 해결하려는 문제
+      description: 현재 어떤 불편/비효율이 있나요?
+      placeholder: 예) 장애 원인 분석에 필요한 로그 상관관계를 수동으로 확인해야 합니다.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: 제안하는 해결책
+      description: 구현 아이디어를 구체적으로 적어주세요.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 완료 기준(AC)
+      description: 체크 가능한 수용 조건을 작성해주세요.
+      placeholder: |
+        - [ ] API 응답에 source_chunk_ids 포함
+        - [ ] 대시보드에 주간 추세 그래프 추가
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 우선순위
+      options:
+        - priority/p0
+        - priority/p1
+        - priority/p2
+        - priority/p3
+    validations:
+      required: true
+  - type: dropdown
+    id: estimate
+    attributes:
+      label: 예상 크기
+      options:
+        - size/xs
+        - size/s
+        - size/m
+        - size/l
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 추가 참고사항
+      description: 디자인/레퍼런스/관련 이슈 링크 등
