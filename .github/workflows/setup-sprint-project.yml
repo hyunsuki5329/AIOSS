@@ -22,25 +22,32 @@ jobs:
     if: ${{ github.event.inputs.action == 'setup-project' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       
       - name: Setup GitHub Project, Labels, Milestones & Issues
         shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
+          $token = "${{ secrets.PROJECT_PAT }}"
+          if ([string]::IsNullOrWhiteSpace($token)) {
+            Write-Host "PROJECT_PAT secret is not set. Falling back to GITHUB_TOKEN." -ForegroundColor Yellow
+            $token = "${{ secrets.GITHUB_TOKEN }}"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($token)) {
+            throw "No token available. Set PROJECT_PAT secret with repo + project scopes."
+          }
+
           .\scripts\bootstrap-github-project.ps1 `
             -Repo "${{ github.repository }}" `
-            -Token ${{ secrets.GITHUB_TOKEN }}
+            -Token $token
 
   generate-metrics:
     if: ${{ github.event.inputs.action == 'generate-metrics' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: '20'
       
