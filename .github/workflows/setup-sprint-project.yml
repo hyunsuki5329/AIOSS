@@ -29,12 +29,7 @@ jobs:
         run: |
           $token = "${{ secrets.PROJECT_PAT }}"
           if ([string]::IsNullOrWhiteSpace($token)) {
-            Write-Host "PROJECT_PAT secret is not set. Falling back to GITHUB_TOKEN." -ForegroundColor Yellow
-            $token = "${{ secrets.GITHUB_TOKEN }}"
-          }
-
-          if ([string]::IsNullOrWhiteSpace($token)) {
-            throw "No token available. Set PROJECT_PAT secret with repo + project scopes."
+            throw "PROJECT_PAT secret is required for Project V2 creation. Create PAT with repo + project scopes and set repository secret PROJECT_PAT."
           }
 
           .\scripts\bootstrap-github-project.ps1 `
