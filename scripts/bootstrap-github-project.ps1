@@ -51,8 +51,8 @@ function Invoke-GitHubGraphQL([string]$Query, $Variables) {
 }
 
 Write-Host "[1/6] repository metadata 확인"
-$repo = Invoke-GitHubRestGet "/repos/$owner/$repoName"
-$ownerType = $repo.owner.type
+$repoInfo = Invoke-GitHubRestGet "/repos/$owner/$repoName"
+$ownerType = $repoInfo.owner.type
 
 $labels = @(
   @{ name = "type/bug"; color = "d73a4a"; description = "버그 수정" },
