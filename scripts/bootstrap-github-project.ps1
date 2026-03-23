@@ -149,12 +149,12 @@ foreach ($i in $issuesSeed) {
 
 Write-Host "[5/6] Project(V2) 생성/조회 및 Status 옵션 설정"
 
-$queryOwner = @"
+$queryOwner = @'
 query($login:String!) {
   user(login:$login) { id login projectsV2(first:50) { nodes { id title url number } } }
   organization(login:$login) { id login projectsV2(first:50) { nodes { id title url number } } }
 }
-"@
+'@
 $ownerData = Invoke-GitHubGraphQL $queryOwner @{ login = $owner }
 
 $ownerNode = $null
@@ -171,19 +171,19 @@ if (-not $ownerNode) {
 $project = $ownerNode.projectsV2.nodes | Where-Object { $_.title -eq $ProjectTitle } | Select-Object -First 1
 
 if (-not $project) {
-  $createProjectMutation = @"
+  $createProjectMutation = @'
 mutation($ownerId:ID!, $title:String!) {
   createProjectV2(input:{ownerId:$ownerId, title:$title}) {
     projectV2 { id title url number }
   }
 }
-"@
+'@
   $createdProject = Invoke-GitHubGraphQL $createProjectMutation @{ ownerId = $ownerNode.id; title = $ProjectTitle }
   $project = $createdProject.createProjectV2.projectV2
   Write-Host "  + project: $($project.title) ($($project.url))"
 }
 
-$getFieldsQuery = @"
+$getFieldsQuery = @'
 query($projectId:ID!) {
   node(id:$projectId) {
     ... on ProjectV2 {
@@ -202,7 +202,7 @@ query($projectId:ID!) {
     }
   }
 }
-"@
+'@
 $projectFields = Invoke-GitHubGraphQL $getFieldsQuery @{ projectId = $project.id }
 $statusField = $projectFields.node.fields.nodes | Where-Object { $_.name -eq "Status" } | Select-Object -First 1
 if (-not $statusField) {
@@ -217,7 +217,7 @@ $statusOptions = @(
   @{ name = "Done"; color = "GREEN"; description = "완료" }
 )
 
-$updateStatusMutation = @"
+$updateStatusMutation = @'
 mutation($projectId:ID!, $fieldId:ID!, $name:String!, $options:[ProjectV2SingleSelectFieldOptionInput!]!) {
   updateProjectV2Field(input:{projectId:$projectId, fieldId:$fieldId, name:$name, singleSelectOptions:$options}) {
     projectV2Field {
@@ -229,20 +229,20 @@ mutation($projectId:ID!, $fieldId:ID!, $name:String!, $options:[ProjectV2SingleS
     }
   }
 }
-"@
+'@
 $updatedFieldData = Invoke-GitHubGraphQL $updateStatusMutation @{ projectId = $project.id; fieldId = $statusField.id; name = "Status"; options = $statusOptions }
 $updatedOptions = $updatedFieldData.updateProjectV2Field.projectV2Field.options
 $statusMap = @{}
 $updatedOptions | ForEach-Object { $statusMap[$_.name] = $_.id }
 
 Write-Host "[6/6] 이슈를 Project에 추가하고 Status 지정"
-$addItemMutation = @"
+$addItemMutation = @'
 mutation($projectId:ID!, $contentId:ID!) {
   addProjectV2ItemById(input:{projectId:$projectId, contentId:$contentId}) { item { id } }
 }
-"@
+'@
 
-$setStatusMutation = @"
+$setStatusMutation = @'
 mutation($projectId:ID!, $itemId:ID!, $fieldId:ID!, $optionId:String!) {
   updateProjectV2ItemFieldValue(
     input:{
@@ -255,7 +255,7 @@ mutation($projectId:ID!, $itemId:ID!, $fieldId:ID!, $optionId:String!) {
     projectV2Item { id }
   }
 }
-"@
+'@
 
 foreach ($row in $createdIssues) {
   $issue = $row.issue
@@ -270,7 +270,7 @@ foreach ($row in $createdIssues) {
     Invoke-GitHubGraphQL $setStatusMutation @{ projectId = $project.id; itemId = $itemId; fieldId = $statusField.id; optionId = $statusMap[$targetStatus] } | Out-Null
   } catch {
     # 이미 추가된 경우를 허용: 기존 item 찾기
-    $itemsQuery = @"
+    $itemsQuery = @'
 query($projectId:ID!) {
   node(id:$projectId) {
     ... on ProjectV2 {
@@ -285,7 +285,7 @@ query($projectId:ID!) {
     }
   }
 }
-"@
+'@
     $itemsData = Invoke-GitHubGraphQL $itemsQuery @{ projectId = $project.id }
     $existingItem = $itemsData.node.items.nodes | Where-Object { $_.content -and $_.content.id -eq $issue.node_id } | Select-Object -First 1
     if ($existingItem) {
