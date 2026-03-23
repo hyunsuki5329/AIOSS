@@ -226,8 +226,8 @@ $statusOptions = @(
 )
 
 $updateStatusMutation = @'
-mutation($projectId:ID!, $fieldId:ID!, $name:String!, $options:[ProjectV2SingleSelectFieldOptionInput!]!) {
-  updateProjectV2Field(input:{projectId:$projectId, fieldId:$fieldId, name:$name, singleSelectOptions:$options}) {
+mutation($fieldId:ID!, $name:String!, $options:[ProjectV2SingleSelectFieldOptionInput!]!) {
+  updateProjectV2Field(input:{fieldId:$fieldId, name:$name, singleSelectOptions:$options}) {
     projectV2Field {
       ... on ProjectV2SingleSelectField {
         id
@@ -238,7 +238,7 @@ mutation($projectId:ID!, $fieldId:ID!, $name:String!, $options:[ProjectV2SingleS
   }
 }
 '@
-$updatedFieldData = Invoke-GitHubGraphQL $updateStatusMutation @{ projectId = $project.id; fieldId = $statusField.id; name = "Status"; options = $statusOptions }
+$updatedFieldData = Invoke-GitHubGraphQL $updateStatusMutation @{ fieldId = $statusField.id; name = "Status"; options = $statusOptions }
 $updatedOptions = $updatedFieldData.updateProjectV2Field.projectV2Field.options
 $statusMap = @{}
 $updatedOptions | ForEach-Object { $statusMap[$_.name] = $_.id }
