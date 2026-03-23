@@ -127,7 +127,9 @@ $issuesSeed = @(
 Write-Host "[4/6] 이슈 백로그(12개) 생성/확인"
 $existingIssues = Invoke-GitHubRestGet "/repos/$owner/$repoName/issues?state=all&per_page=100"
 $issueMap = @{}
-$existingIssues | Where-Object { -not $_.pull_request } | ForEach-Object { $issueMap[$_.title] = $_ }
+$existingIssues |
+  Where-Object { $_.PSObject.Properties.Name -notcontains "pull_request" } |
+  ForEach-Object { $issueMap[$_.title] = $_ }
 
 $createdIssues = @()
 foreach ($i in $issuesSeed) {
