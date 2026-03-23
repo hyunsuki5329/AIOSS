@@ -43,7 +43,7 @@ function Invoke-GitHubGraphQL([string]$Query, $Variables) {
   } | ConvertTo-Json -Depth 30
 
   $response = Invoke-RestMethod -Method Post -Uri "$apiBase/graphql" -Headers $headers -Body $body
-  if ($response.errors) {
+  if ($response.PSObject.Properties.Name -contains "errors" -and $response.errors) {
     $err = ($response.errors | ConvertTo-Json -Depth 10)
     throw "GraphQL error: $err"
   }
