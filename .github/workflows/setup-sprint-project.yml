@@ -29,7 +29,11 @@ jobs:
         run: |
           $token = "${{ secrets.PROJECT_PAT }}"
           if ([string]::IsNullOrWhiteSpace($token)) {
-            throw "PROJECT_PAT secret is required for Project V2 creation. Create PAT with repo + project scopes and set repository secret PROJECT_PAT."
+            $token = "${{ secrets.AIOSS_TOKEN }}"
+          }
+
+          if ([string]::IsNullOrWhiteSpace($token)) {
+            throw "PROJECT_PAT or AIOSS_TOKEN secret is required for Project V2 creation. Create PAT with repo + project scopes."
           }
 
           .\scripts\bootstrap-github-project.ps1 `
