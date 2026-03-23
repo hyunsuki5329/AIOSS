@@ -149,18 +149,24 @@ foreach ($i in $issuesSeed) {
 
 Write-Host "[5/6] Project(V2) 생성/조회 및 Status 옵션 설정"
 
-$queryOwner = @'
+$ownerData = $null
+$ownerNode = $null
+
+if ($ownerType -eq "Organization") {
+  $queryOwner = @'
 query($login:String!) {
-  user(login:$login) { id login projectsV2(first:50) { nodes { id title url number } } }
   organization(login:$login) { id login projectsV2(first:50) { nodes { id title url number } } }
 }
 '@
-$ownerData = Invoke-GitHubGraphQL $queryOwner @{ login = $owner }
-
-$ownerNode = $null
-if ($ownerType -eq "Organization" -and $ownerData.organization) {
+  $ownerData = Invoke-GitHubGraphQL $queryOwner @{ login = $owner }
   $ownerNode = $ownerData.organization
-} elseif ($ownerData.user) {
+} else {
+  $queryOwner = @'
+query($login:String!) {
+  user(login:$login) { id login projectsV2(first:50) { nodes { id title url number } } }
+}
+'@
+  $ownerData = Invoke-GitHubGraphQL $queryOwner @{ login = $owner }
   $ownerNode = $ownerData.user
 }
 
