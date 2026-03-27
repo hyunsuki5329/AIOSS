@@ -1,0 +1,13 @@
+{
+  "name": "aioss-vscode",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "node --check scripts/dora-metrics.mjs && node --check scripts/sprint-metrics.mjs",
+    "test": "node --test \"tests/**/*.test.js\""
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
