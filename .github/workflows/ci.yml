@@ -5,7 +5,12 @@ on:
 
 jobs:
   lint-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [16, 18, 20]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Checkout
@@ -14,16 +19,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node-version }}
           cache: npm
 
       - name: Install dependencies
+        shell: pwsh
         run: |
-          if [ -f package-lock.json ]; then
+          if (Test-Path package-lock.json) {
             npm ci
-          else
+          } else {
             npm install
-          fi
+          }
 
       - name: Lint
         run: npm run lint
