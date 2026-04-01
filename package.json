@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "lint": "node --check scripts/dora-metrics.mjs && node --check scripts/sprint-metrics.mjs",
-    "test": "node --test \"tests/**/*.test.js\""
+    "test": "node --test"
   },
   "engines": {
     "node": ">=18"
