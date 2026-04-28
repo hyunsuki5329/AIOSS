@@ -1,0 +1,63 @@
+name: Node Validation Reusable
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version to validate
+        required: true
+        type: string
+      os:
+        description: Runner image to use
+        required: true
+        type: string
+      cache:
+        description: Enable npm cache
+        required: false
+        type: boolean
+        default: true
+      run-lint:
+        description: Run lint step
+        required: false
+        type: boolean
+        default: true
+      run-test:
+        description: Run test step
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ${{ inputs.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node and install dependencies
+        id: setup
+        uses: ./.github/actions/node-setup
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.cache }}
+
+      - name: Lint
+        if: ${{ inputs.run-lint }}
+        run: npm run lint
+
+      - name: Test
+        if: ${{ inputs.run-test }}
+        run: npm test
+
+      - name: Summarize execution
+        if: always()
+        shell: bash
+        run: |
+          printf '%s\n' \
+            "node-version=${{ inputs.node-version }}" \
+            "os=${{ inputs.os }}" \
+            "cache-hit=${{ steps.setup.outputs.cache-hit }}" \
+            "install-ms=${{ steps.setup.outputs.install-ms }}"

@@ -1,0 +1,51 @@
+name: Node Setup and Install
+description: Configure Node.js, optionally enable npm caching, and measure dependency install time.
+inputs:
+  node-version:
+    description: Node.js version to use
+    required: true
+  cache:
+    description: Whether to enable npm cache restoration
+    required: false
+    default: 'true'
+outputs:
+  cache-hit:
+    description: Whether the npm cache was restored
+    value: ${{ steps.install.outputs.cache-hit }}
+  install-ms:
+    description: Dependency installation duration in milliseconds
+    value: ${{ steps.install.outputs.install-ms }}
+runs:
+  using: composite
+  steps:
+    - id: setup-node-cached
+      if: ${{ inputs.cache == 'true' }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: npm
+        cache-dependency-path: package-lock.json
+
+    - id: setup-node-plain
+      if: ${{ inputs.cache != 'true' }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - id: install
+      shell: pwsh
+      run: |
+        $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+        if (Test-Path package-lock.json) {
+          npm ci
+        } else {
+          npm install
+        }
+        $stopwatch.Stop()
+        "install-ms=$($stopwatch.ElapsedMilliseconds)" >> $env:GITHUB_OUTPUT
+
+        if ('${{ inputs.cache }}' -eq 'true') {
+          "cache-hit=${{ steps.setup-node-cached.outputs.cache-hit }}" >> $env:GITHUB_OUTPUT
+        } else {
+          "cache-hit=false" >> $env:GITHUB_OUTPUT
+        }

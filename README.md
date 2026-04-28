@@ -112,3 +112,25 @@ python -m http.server 8080
 
 ## 📝 License
 MIT License
+
+## ⚙ Workflow Optimization
+
+워크플로우 재사용과 캐싱, 조건부 배포를 적용한 최적화 자료입니다.
+
+- [Workflow Optimization Report](reports/workflow-optimization-report.md)
+- [CI Workflow](.github/workflows/ci.yml)
+- [Reusable Node Validation Workflow](.github/workflows/node-validate.yml)
+- [Composite Node Setup Action](.github/actions/node-setup/action.yml)
+
+## 🤝 Community
+
+이 저장소는 공개 OSS 협업을 염두에 두고 다음 문서를 함께 유지합니다.
+
+- [CONTRIBUTING](CONTRIBUTING.md) - 기여 방법과 개발 참여 절차
+- [CODE_OF_CONDUCT](CODE_OF_CONDUCT.md) - 커뮤니티 행동 규범
+
+## 📚 Project Docs
+
+- [Getting Started](docs/assignment_W5/Getting_Started.md)
+- [Development Guide](docs/assignment_W5/Development_Guide.md)
+- [Troubleshooting](docs/assignment_W5/Troubleshooting.md)
