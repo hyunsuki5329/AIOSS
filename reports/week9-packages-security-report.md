@@ -1,15 +1,15 @@
-# Week 9 Delivery Report
+# 9주차 산출물 보고서
 
-## Completed Scope
+## 완료 범위
 
-- npm package metadata updated for GitHub Packages publishing.
-- Version bumped from 1.0.0 to 1.0.1.
-- Docker image build/push workflow added for GHCR.
-- Dependabot policy added for npm and GitHub Actions updates.
-- Weekly npm audit workflow added with issue creation/update and artifact upload.
-- Dependabot auto-merge workflow added for safe dependency updates.
+- GitHub Packages 배포를 위한 npm 패키지 메타데이터를 설정했습니다.
+- 버전을 1.0.0에서 1.0.1로 올렸습니다.
+- GHCR용 Docker 이미지 빌드/푸시 워크플로우를 추가했습니다.
+- npm과 GitHub Actions 업데이트를 위한 Dependabot 정책을 추가했습니다.
+- 주간 npm audit 워크플로우를 추가해 이슈 생성/갱신과 아티팩트 업로드를 자동화했습니다.
+- 안전한 의존성 업데이트를 위한 Dependabot 자동 머지 워크플로우를 추가했습니다.
 
-## Key Files
+## 주요 파일
 
 - [package.json](../package.json)
 - [package-lock.json](../package-lock.json)
@@ -19,13 +19,13 @@
 - [.github/workflows/security-audit.yml](../.github/workflows/security-audit.yml)
 - [.github/workflows/dependabot-automerge.yml](../.github/workflows/dependabot-automerge.yml)
 
-## Verification
+## 검증 결과
 
-- Node.js script syntax check passed with the available `node.exe` binary.
-- `node --test` passed successfully.
-- `git diff --check` returned clean output.
+- 사용 가능한 `node.exe`로 Node.js 스크립트 구문 검사를 통과했습니다.
+- `node --test`를 성공적으로 통과했습니다.
+- `git diff --check` 결과 이상이 없었습니다.
 
-## Notes
+## 참고 사항
 
-- Local `npm` was not available in the workspace environment, so `npm ci` and `npm publish` were not executed locally.
-- The publish workflow is configured to use `https://npm.pkg.github.com` and `GITHUB_TOKEN`.
+- 작업 환경에서 로컬 `npm`을 사용할 수 없어 `npm ci`와 `npm publish`는 실행하지 못했습니다.
+- 배포 워크플로우는 `https://npm.pkg.github.com`와 `GITHUB_TOKEN`을 사용하도록 설정했습니다.
