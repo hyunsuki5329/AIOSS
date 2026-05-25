@@ -47,6 +47,161 @@
         color: #6f5c40;
       }
 
+      .status-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: #fffdf9;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+
+      .status-chip strong {
+        font-size: 0.85rem;
+        color: #7a674b;
+      }
+
+      .flag-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .flag-card,
+      .event-panel,
+      .experiment-panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .flag-name {
+        font-size: 0.9rem;
+        font-weight: 700;
+      }
+
+      .flag-meta {
+        margin-top: 6px;
+        font-size: 0.85rem;
+        color: #7a674b;
+      }
+
+      .flag-state {
+        margin-top: 10px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
+      }
+
+      .flag-state.on {
+        background: #edf8ed;
+        color: #2e6b35;
+      }
+
+      .flag-state.off {
+        background: #faece6;
+        color: #9f4c2f;
+      }
+
+      .experiment-banner {
+        display: none;
+        margin-bottom: 20px;
+        border-radius: 14px;
+        border: 1px solid #d9b88b;
+        background: linear-gradient(135deg, #fff1dc, #fff9ef);
+        padding: 14px;
+        color: #7b4923;
+      }
+
+      .experiment-banner.active {
+        display: block;
+      }
+
+      .metrics-v2 .cards {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .compact .card {
+        padding: 12px;
+      }
+
+      .compact .value {
+        font-size: 1.15rem;
+      }
+
+      .dashboard-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+        gap: 14px;
+        align-items: start;
+        margin-bottom: 20px;
+      }
+
+      .event-list {
+        list-style: none;
+        padding: 0;
+        margin: 12px 0 0;
+        display: grid;
+        gap: 10px;
+      }
+
+      .event-item {
+        border-top: 1px solid #eadcc5;
+        padding-top: 10px;
+        font-size: 0.9rem;
+      }
+
+      .event-item:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .event-type {
+        font-weight: 700;
+      }
+
+      .event-time {
+        color: #8d7856;
+        font-size: 0.82rem;
+        margin-top: 2px;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .button {
+        border: 1px solid #d3c2a3;
+        background: #fffdf8;
+        color: #44341f;
+        border-radius: 999px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .button:hover {
+        border-color: #b18a59;
+      }
+
       .cards {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -80,6 +235,11 @@
       }
 
       @media (max-width: 720px) {
+        .dashboard-layout,
+        .flag-grid {
+          grid-template-columns: 1fr;
+        }
+
         .cards {
           grid-template-columns: 1fr;
         }
@@ -87,33 +247,105 @@
     </style>
   </head>
   <body>
-    <main class="container">
+    <main class="container" id="dashboardRoot">
       <h1>DORA 4 Metrics</h1>
       <p class="subtitle" id="generatedAt">데이터 로딩 중...</p>
 
-      <section class="cards" id="metricsCards"></section>
+      <section class="experiment-banner" id="experimentBanner"></section>
 
-      <section class="chart">
-        <canvas id="doraChart" height="120"></canvas>
+      <section class="status-strip" id="statusStrip"></section>
+
+      <section class="flag-grid" id="flagGrid"></section>
+
+      <section class="dashboard-layout">
+        <section>
+          <section class="cards" id="metricsCards"></section>
+
+          <section class="chart">
+            <canvas id="doraChart" height="120"></canvas>
+          </section>
+        </section>
+
+        <section class="event-panel">
+          <div class="flag-name">실험 로그</div>
+          <div class="flag-meta" id="eventSummary">이벤트 로딩 중...</div>
+          <ul class="event-list" id="eventLog"></ul>
+          <div class="controls">
+            <button class="button" type="button" id="exportOverridesButton">현재 오버라이드 저장</button>
+            <button class="button" type="button" id="clearOverridesButton">오버라이드 초기화</button>
+          </div>
+        </section>
       </section>
     </main>
 
+    <script src="./feature-flags.js"></script>
+
     <script>
       async function loadDashboard() {
-        const response = await fetch("./sample-dora-metrics.json");
-        const data = await response.json();
+        const [data, runtime] = await Promise.all([
+          fetch("./sample-dora-metrics.json").then((response) => response.json()),
+          window.AIOSSFlags.bootstrap()
+        ]);
 
+        const root = document.getElementById("dashboardRoot");
+        root.classList.toggle("metrics-v2", Boolean(runtime.flags.metricsV2?.enabled));
+        root.classList.toggle("compact", runtime.experiment.variant === "compact");
+
+        const variantLabel = runtime.experiment.variant === "compact" ? "압축형" : "기본형";
         document.getElementById("generatedAt").textContent =
           `최근 ${data.windowDays}일 기준 자동 수집 | 생성 시각: ${new Date(data.generatedAt).toLocaleString("ko-KR")}`;
 
+        document.getElementById("experimentBanner").classList.toggle("active", runtime.flags.experimentalUI?.enabled);
+        document.getElementById("experimentBanner").textContent =
+          runtime.flags.experimentalUI?.enabled
+            ? `실험 UI 활성화: 사용자 ${runtime.audience} / 레이아웃 변형 ${variantLabel} / consistent assignment ${runtime.experiment.reason}`
+            : "실험 UI 비활성화";
+
+        window.AIOSSFlags.trackEvent("variant_assigned", {
+          experiment: runtime.experiment.name,
+          variant: runtime.experiment.variant,
+          reason: runtime.experiment.reason,
+          audience: runtime.audience
+        });
+
+        const statusStrip = document.getElementById("statusStrip");
+        statusStrip.innerHTML = [
+          `<span class="status-chip"><strong>사용자</strong>${runtime.userId}</span>`,
+          `<span class="status-chip"><strong>세그먼트</strong>${runtime.audience}</span>`,
+          `<span class="status-chip"><strong>AB Variant</strong>${runtime.experiment.variant}</span>`,
+          `<span class="status-chip"><strong>오버라이드</strong>${Object.keys(runtime.overrides).length || 0}개</span>`
+        ].join("");
+
+        const flagGrid = document.getElementById("flagGrid");
+        flagGrid.innerHTML = Object.entries(runtime.flags)
+          .map(([name, state]) => {
+            const description = runtime.settings.flags?.[name]?.description || "";
+            return `
+              <article class="flag-card">
+                <div class="flag-name">${name}</div>
+                <div class="flag-meta">${description}</div>
+                <div class="flag-state ${state.enabled ? "on" : "off"}">${state.enabled ? "활성" : "비활성"} · ${state.reason}</div>
+              </article>
+            `;
+          })
+          .join("");
+
         const units = ["h", "deploy/day", "h", "%"];
-        const cards = data.labels
+        const values = runtime.flags.metricsV2?.enabled
+          ? [...data.values, Math.round(((data.values[0] + data.values[2]) / 2) * 10) / 10]
+          : data.values;
+        const labels = runtime.flags.metricsV2?.enabled
+          ? [...data.labels, "Reliability Score"]
+          : data.labels;
+
+        const cards = labels
           .map((label, idx) => {
-            const value = data.values[idx];
+            const value = values[idx];
+            const unit = units[idx] || "score";
             return `
               <article class="card">
                 <div class="label">${label}</div>
-                <div class="value">${value} ${units[idx]}</div>
+                <div class="value">${value} ${unit}</div>
               </article>
             `;
           })
@@ -121,16 +353,32 @@
 
         document.getElementById("metricsCards").innerHTML = cards;
 
+        document.getElementById("exportOverridesButton").addEventListener("click", () => {
+          runtime.exportOverrides(runtime.overrides);
+          runtime.trackEvent("overrides_saved", { overrides: runtime.overrides });
+          window.location.reload();
+        });
+
+        document.getElementById("clearOverridesButton").addEventListener("click", () => {
+          runtime.clearOverrides();
+          runtime.trackEvent("overrides_cleared", {});
+          window.location.reload();
+        });
+
+        const chartBackground = runtime.flags.enhancedCharts?.enabled
+          ? ["#7c3f25", "#b0603d", "#d18656", "#e2a46f"]
+          : ["#bd5d38", "#d77950", "#e39c72", "#f0be8f"];
+
         const ctx = document.getElementById("doraChart");
         new Chart(ctx, {
           type: "bar",
           data: {
-            labels: data.labels,
+            labels,
             datasets: [
               {
                 label: "DORA Value",
-                data: data.values,
-                backgroundColor: ["#bd5d38", "#d77950", "#e39c72", "#f0be8f"],
+                data: values,
+                backgroundColor: chartBackground,
                 borderRadius: 8
               }
             ]
@@ -138,11 +386,42 @@
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            indexAxis: runtime.flags.enhancedCharts?.enabled ? "y" : "x",
             plugins: {
               legend: { display: false }
-            }
+            },
+            scales: runtime.flags.enhancedCharts?.enabled
+              ? {
+                  x: {
+                    grid: {
+                      color: "rgba(189, 93, 56, 0.12)"
+                    }
+                  },
+                  y: {
+                    grid: {
+                      display: false
+                    }
+                  }
+                }
+              : {}
           }
         });
+
+        window.AIOSSFlags.trackEvent("dashboard_rendered", {
+          variant: runtime.experiment.variant,
+          flags: Object.fromEntries(Object.entries(runtime.flags).map(([name, value]) => [name, value.enabled]))
+        });
+
+        const eventLog = document.getElementById("eventLog");
+        const events = runtime.readEventLog();
+        document.getElementById("eventSummary").textContent = `총 ${events.length}개 이벤트가 로컬 저장소에 기록되었습니다.`;
+        eventLog.innerHTML = events.slice(0, 6).map((event) => `
+          <li class="event-item">
+            <div class="event-type">${event.type}</div>
+            <div>${JSON.stringify(event.payload)}</div>
+            <div class="event-time">${new Date(event.timestamp).toLocaleString("ko-KR")}</div>
+          </li>
+        `).join("");
       }
 
       loadDashboard().catch((error) => {

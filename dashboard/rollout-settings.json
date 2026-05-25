@@ -1,0 +1,29 @@
+{
+  "flags": {
+    "metricsV2": {
+      "enabled": true,
+      "rolloutPercent": 100,
+      "audiences": ["observer", "beta", "maintainer"],
+      "description": "메트릭 카드와 요약 점수를 새 레이아웃으로 표시"
+    },
+    "enhancedCharts": {
+      "enabled": true,
+      "rolloutPercent": 60,
+      "audiences": ["beta", "maintainer"],
+      "description": "차트 색상과 보조 통계 패널을 활성화"
+    },
+    "experimentalUI": {
+      "enabled": true,
+      "rolloutPercent": 30,
+      "audiences": ["maintainer"],
+      "description": "실험 배너와 압축형 카드 레이아웃을 표시"
+    }
+  },
+  "experiments": {
+    "dashboardLayout": {
+      "variants": ["control", "compact"],
+      "weights": [50, 50],
+      "description": "대시보드 카드 배열과 간격을 두 가지 버전으로 비교"
+    }
+  }
+}
