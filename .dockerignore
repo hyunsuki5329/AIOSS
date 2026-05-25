@@ -1,0 +1,7 @@
+node_modules
+.git
+.github
+artifacts
+coverage
+npm-debug.log
+*.log

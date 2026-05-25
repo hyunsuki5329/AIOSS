@@ -1,0 +1,49 @@
+name: Publish npm package
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node and install dependencies
+        uses: ./.github/actions/node-setup
+        with:
+          node-version: 20
+          cache: true
+
+      - name: Validate package contents
+        run: |
+          npm run lint
+          npm test
+          npm run pack:dry-run
+
+  publish:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node and install dependencies
+        uses: ./.github/actions/node-setup
+        with:
+          node-version: 20
+          cache: true
+
+      - name: Publish to GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_CONFIG_REGISTRY: https://npm.pkg.github.com
+        run: npm publish --access restricted

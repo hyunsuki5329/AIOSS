@@ -1,11 +1,23 @@
 {
-  "name": "aioss-vscode",
-  "version": "1.0.0",
-  "private": true,
+  "name": "@hyunsuki5329/aioss-vscode",
+  "version": "1.0.1",
+  "private": false,
   "type": "module",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dashboard",
+    "docs",
+    "reports",
+    "scripts",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "lint": "node --check scripts/dora-metrics.mjs && node --check scripts/sprint-metrics.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "pack:dry-run": "npm pack --dry-run"
   },
   "engines": {
     "node": ">=18"
