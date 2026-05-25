@@ -15,9 +15,10 @@
     "LICENSE"
   ],
   "scripts": {
-    "lint": "node --check scripts/dora-metrics.mjs && node --check scripts/sprint-metrics.mjs && node --check scripts/coverage-gate.mjs",
+    "lint": "node --check scripts/dora-metrics.mjs && node --check scripts/sprint-metrics.mjs && node --check scripts/coverage-gate.mjs && node --check scripts/week13-experiment-analysis.mjs",
     "test": "node --test",
     "test:coverage": "node scripts/coverage-gate.mjs",
+    "analyze:week13": "node scripts/week13-experiment-analysis.mjs",
     "pack:dry-run": "npm pack --dry-run"
   },
   "engines": {

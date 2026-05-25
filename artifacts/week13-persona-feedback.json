@@ -1,0 +1,106 @@
+{
+  "generatedAt": "2026-05-25T06:20:00.000Z",
+  "source": "LLM persona simulation",
+  "participants": [
+    {
+      "personaId": "P01",
+      "profile": "지자체 민원 담당 주무관, 7년차",
+      "scenario": "민원 키워드로 과거 유사사례를 찾고 1차 답변 초안을 작성",
+      "variant": "control",
+      "satisfaction": 4,
+      "frictionPoints": ["필터 위치가 눈에 띄지 않음"],
+      "quote": "검색 정확도는 좋지만 필터 조작이 두 번 필요해요.",
+      "decisionSignal": "iterate"
+    },
+    {
+      "personaId": "P02",
+      "profile": "신규 공무직, 입사 6개월",
+      "scenario": "접수된 민원 텍스트를 구조화하고 누락 항목 확인",
+      "variant": "compact",
+      "satisfaction": 5,
+      "frictionPoints": ["초기 용어 이해 난이도"],
+      "quote": "요약 카드가 한눈에 보여서 교육용으로 좋습니다.",
+      "decisionSignal": "scale"
+    },
+    {
+      "personaId": "P03",
+      "profile": "민원 콜센터 상담 리더",
+      "scenario": "반복 문의 3건을 묶어 대응 문구 표준화",
+      "variant": "compact",
+      "satisfaction": 4,
+      "frictionPoints": ["출처 링크 클릭 동선이 길다"],
+      "quote": "반복 민원 대응 시간이 줄었지만 출처 이동은 더 빨라져야 합니다.",
+      "decisionSignal": "iterate"
+    },
+    {
+      "personaId": "P04",
+      "profile": "정보보안 담당 사무관",
+      "scenario": "온프레미스 환경에서 로그 누락 없이 결과 검증",
+      "variant": "control",
+      "satisfaction": 3,
+      "frictionPoints": ["감사 로그 내보내기 포맷 부족", "권한별 뷰 분리 필요"],
+      "quote": "보안 관점 메타데이터는 더 세분화되어야 합니다.",
+      "decisionSignal": "pivot"
+    },
+    {
+      "personaId": "P05",
+      "profile": "지역 시설관리 민원 처리 담당",
+      "scenario": "도로 파손 민원에서 유사 케이스 근거를 찾고 처리 우선순위 산정",
+      "variant": "compact",
+      "satisfaction": 5,
+      "frictionPoints": [],
+      "quote": "근거 케이스가 즉시 보여 현장 지시가 빨라졌어요.",
+      "decisionSignal": "scale"
+    },
+    {
+      "personaId": "P06",
+      "profile": "데이터 분석 계약직",
+      "scenario": "주간 민원 트렌드 대시보드 추세 확인",
+      "variant": "control",
+      "satisfaction": 4,
+      "frictionPoints": ["차트 export 기능 부재"],
+      "quote": "수치는 충분하지만 보고서 추출 버튼이 있으면 좋겠습니다.",
+      "decisionSignal": "iterate"
+    },
+    {
+      "personaId": "P07",
+      "profile": "야간 당직 민원 대응자",
+      "scenario": "긴급 민원 접수 후 기존 유사사례로 신속 대응",
+      "variant": "compact",
+      "satisfaction": 5,
+      "frictionPoints": ["모바일 화면에서 버튼 간격 좁음"],
+      "quote": "야간에도 빠르게 판단 가능했고 compact 화면이 특히 편했습니다.",
+      "decisionSignal": "scale"
+    },
+    {
+      "personaId": "P08",
+      "profile": "민원 품질관리 QA",
+      "scenario": "답변 초안과 근거 일치 여부 점검",
+      "variant": "control",
+      "satisfaction": 3,
+      "frictionPoints": ["근거-답변 매핑 강조 부족"],
+      "quote": "검수 기준은 맞지만 근거 하이라이트가 더 또렷해야 합니다.",
+      "decisionSignal": "pivot"
+    },
+    {
+      "personaId": "P09",
+      "profile": "민원 행정지원 인턴",
+      "scenario": "주간 리포트 작성용 핵심 민원 5건 요약",
+      "variant": "compact",
+      "satisfaction": 4,
+      "frictionPoints": ["처음엔 용어 설명 필요"],
+      "quote": "compact에서 요약 작업이 빨랐고 학습 자료가 조금 더 필요합니다.",
+      "decisionSignal": "iterate"
+    },
+    {
+      "personaId": "P10",
+      "profile": "민원 총괄 팀장",
+      "scenario": "팀 KPI 회의 전 주간 성과 비교",
+      "variant": "compact",
+      "satisfaction": 5,
+      "frictionPoints": [],
+      "quote": "결정에 필요한 수치와 근거가 한 번에 보여 회의 시간이 줄었습니다.",
+      "decisionSignal": "scale"
+    }
+  ]
+}

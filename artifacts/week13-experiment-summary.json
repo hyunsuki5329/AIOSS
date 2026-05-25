@@ -1,0 +1,68 @@
+{
+  "generatedAt": "2026-05-25T06:23:52.803Z",
+  "experimentName": "dashboardLayout",
+  "window": {
+    "start": "2026-05-11",
+    "end": "2026-05-24",
+    "days": 14
+  },
+  "feedbackSummary": {
+    "participants": 10,
+    "averageSatisfaction": 4.2,
+    "signals": {
+      "scale": 4,
+      "iterate": 4,
+      "pivot": 2
+    },
+    "topFrictions": [
+      {
+        "label": "필터 위치가 눈에 띄지 않음",
+        "value": 1
+      },
+      {
+        "label": "초기 용어 이해 난이도",
+        "value": 1
+      },
+      {
+        "label": "출처 링크 클릭 동선이 길다",
+        "value": 1
+      },
+      {
+        "label": "감사 로그 내보내기 포맷 부족",
+        "value": 1
+      },
+      {
+        "label": "권한별 뷰 분리 필요",
+        "value": 1
+      }
+    ]
+  },
+  "abSummary": {
+    "control": {
+      "users": 557,
+      "engagedUsers": 334,
+      "taskSuccess": 227,
+      "engagementRate": 59.96,
+      "taskSuccessRate": 40.75
+    },
+    "compact": {
+      "users": 563,
+      "engagedUsers": 393,
+      "taskSuccess": 298,
+      "engagementRate": 69.8,
+      "taskSuccessRate": 52.93
+    },
+    "uplift": {
+      "engagementRate": 9.84,
+      "taskSuccessRate": 12.18
+    }
+  },
+  "decision": {
+    "recommendation": "scale_compact_variant",
+    "rationale": [
+      "compact variant task success uplift: 12.18%p",
+      "compact variant engagement uplift: 9.84%p",
+      "feedback signals (scale/iterate/pivot): 4/4/2"
+    ]
+  }
+}

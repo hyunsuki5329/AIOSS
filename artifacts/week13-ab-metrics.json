@@ -1,0 +1,40 @@
+{
+  "experimentName": "dashboardLayout",
+  "window": {
+    "start": "2026-05-11",
+    "end": "2026-05-24",
+    "days": 14
+  },
+  "control": [
+    { "date": "2026-05-11", "users": 38, "engagedUsers": 23, "taskSuccess": 16 },
+    { "date": "2026-05-12", "users": 41, "engagedUsers": 25, "taskSuccess": 17 },
+    { "date": "2026-05-13", "users": 36, "engagedUsers": 20, "taskSuccess": 14 },
+    { "date": "2026-05-14", "users": 40, "engagedUsers": 24, "taskSuccess": 16 },
+    { "date": "2026-05-15", "users": 39, "engagedUsers": 23, "taskSuccess": 15 },
+    { "date": "2026-05-16", "users": 43, "engagedUsers": 27, "taskSuccess": 18 },
+    { "date": "2026-05-17", "users": 35, "engagedUsers": 20, "taskSuccess": 13 },
+    { "date": "2026-05-18", "users": 42, "engagedUsers": 26, "taskSuccess": 18 },
+    { "date": "2026-05-19", "users": 37, "engagedUsers": 22, "taskSuccess": 15 },
+    { "date": "2026-05-20", "users": 44, "engagedUsers": 27, "taskSuccess": 19 },
+    { "date": "2026-05-21", "users": 40, "engagedUsers": 24, "taskSuccess": 16 },
+    { "date": "2026-05-22", "users": 39, "engagedUsers": 23, "taskSuccess": 15 },
+    { "date": "2026-05-23", "users": 45, "engagedUsers": 28, "taskSuccess": 20 },
+    { "date": "2026-05-24", "users": 38, "engagedUsers": 22, "taskSuccess": 15 }
+  ],
+  "compact": [
+    { "date": "2026-05-11", "users": 39, "engagedUsers": 27, "taskSuccess": 20 },
+    { "date": "2026-05-12", "users": 40, "engagedUsers": 28, "taskSuccess": 21 },
+    { "date": "2026-05-13", "users": 37, "engagedUsers": 25, "taskSuccess": 18 },
+    { "date": "2026-05-14", "users": 41, "engagedUsers": 29, "taskSuccess": 22 },
+    { "date": "2026-05-15", "users": 40, "engagedUsers": 28, "taskSuccess": 21 },
+    { "date": "2026-05-16", "users": 42, "engagedUsers": 30, "taskSuccess": 23 },
+    { "date": "2026-05-17", "users": 36, "engagedUsers": 24, "taskSuccess": 18 },
+    { "date": "2026-05-18", "users": 43, "engagedUsers": 31, "taskSuccess": 24 },
+    { "date": "2026-05-19", "users": 38, "engagedUsers": 26, "taskSuccess": 20 },
+    { "date": "2026-05-20", "users": 44, "engagedUsers": 31, "taskSuccess": 24 },
+    { "date": "2026-05-21", "users": 39, "engagedUsers": 27, "taskSuccess": 21 },
+    { "date": "2026-05-22", "users": 40, "engagedUsers": 28, "taskSuccess": 21 },
+    { "date": "2026-05-23", "users": 45, "engagedUsers": 32, "taskSuccess": 25 },
+    { "date": "2026-05-24", "users": 39, "engagedUsers": 27, "taskSuccess": 20 }
+  ]
+}
