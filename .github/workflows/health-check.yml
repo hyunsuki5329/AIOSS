@@ -1,0 +1,65 @@
+name: Deployment health check
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FLY_URL: https://aioss-dashboard-hyunsuki5329.fly.dev/
+
+jobs:
+  check-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check GitHub Pages deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          owner_name="${GITHUB_REPOSITORY%/*}"
+          repo_name="${GITHUB_REPOSITORY#*/}"
+          pages_url="https://${owner_name}.github.io/${repo_name}/"
+          curl -fsSL "$pages_url" | grep -q 'DORA Metrics Dashboard'
+          curl -fsSL "${pages_url}sample-dora-metrics.json" | grep -q '"windowDays"'
+
+  check-local-monitoring:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start monitoring stack
+        run: docker compose up -d
+
+      - name: Verify Prometheus and Grafana health
+        shell: bash
+        run: |
+          set -euo pipefail
+          for url in \
+            http://localhost:9090/-/ready \
+            http://localhost:3000/api/health
+          do
+            for _ in {1..12}; do
+              if curl -fsSL "$url" >/dev/null; then
+                break
+              fi
+              sleep 5
+            done
+            curl -fsSL "$url" >/dev/null
+          done
+
+      - name: Stop monitoring stack
+        if: always()
+        run: docker compose down -v
+
+  check-fly:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Fly.io deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL "$FLY_URL" | grep -q 'DORA Metrics Dashboard'

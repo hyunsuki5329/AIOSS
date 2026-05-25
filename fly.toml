@@ -1,0 +1,13 @@
+app = "aioss-dashboard-hyunsuki5329"
+primary_region = "nrt"
+
+[build]
+  dockerfile = "Dockerfile.web"
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
