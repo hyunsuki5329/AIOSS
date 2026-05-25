@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DORA Metrics Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <style>
+      :root {
+        --bg: #f7f4ef;
+        --panel: #fffaf3;
+        --text: #2a2318;
+        --line: #decfb8;
+        --accent: #bd5d38;
+        --accent-soft: #e6a175;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Segoe UI", "Noto Sans KR", sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 10% 0%, #fce3c8 0%, transparent 35%),
+          radial-gradient(circle at 90% 10%, #f7cfad 0%, transparent 25%),
+          var(--bg);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+        letter-spacing: 0.02em;
+      }
+
+      .subtitle {
+        margin: 8px 0 24px;
+        color: #6f5c40;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      .label {
+        font-size: 0.85rem;
+        color: #7a674b;
+      }
+
+      .value {
+        margin-top: 8px;
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+
+      .chart {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 14px;
+      }
+
+      @media (max-width: 720px) {
+        .cards {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>DORA 4 Metrics</h1>
+      <p class="subtitle" id="generatedAt">데이터 로딩 중...</p>
+
+      <section class="cards" id="metricsCards"></section>
+
+      <section class="chart">
+        <canvas id="doraChart" height="120"></canvas>
+      </section>
+    </main>
+
+    <script>
+      async function loadDashboard() {
+        const response = await fetch("./sample-dora-metrics.json");
+        const data = await response.json();
+
+        document.getElementById("generatedAt").textContent =
+          `최근 ${data.windowDays}일 기준 자동 수집 | 생성 시각: ${new Date(data.generatedAt).toLocaleString("ko-KR")}`;
+
+        const units = ["h", "deploy/day", "h", "%"];
+        const cards = data.labels
+          .map((label, idx) => {
+            const value = data.values[idx];
+            return `
+              <article class="card">
+                <div class="label">${label}</div>
+                <div class="value">${value} ${units[idx]}</div>
+              </article>
+            `;
+          })
+          .join("");
+
+        document.getElementById("metricsCards").innerHTML = cards;
+
+        const ctx = document.getElementById("doraChart");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: "DORA Value",
+                data: data.values,
+                backgroundColor: ["#bd5d38", "#d77950", "#e39c72", "#f0be8f"],
+                borderRadius: 8
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+      }
+
+      loadDashboard().catch((error) => {
+        document.getElementById("generatedAt").textContent = `대시보드 로드 실패: ${error.message}`;
+      });
+    </script>
+  </body>
+</html>
