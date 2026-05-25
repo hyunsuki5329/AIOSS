@@ -63,6 +63,22 @@ jobs:
       run-lint: true
       run-test: true
 
+  coverage:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node and install dependencies
+        uses: ./.github/actions/node-setup
+        with:
+          node-version: 22
+          cache: true
+
+      - name: Run coverage threshold check
+        run: npm run test:coverage
+
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
@@ -96,7 +112,7 @@ jobs:
               - 'CODE_OF_CONDUCT.md'
 
   deploy-preview:
-    needs: [build, test, detect-changes]
+    needs: [build, test, coverage, detect-changes]
     if: github.event_name == 'pull_request' && needs.detect-changes.outputs.deployable == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -113,7 +129,7 @@ jobs:
           ls -la dist
 
   deploy:
-    needs: [build, test, detect-changes]
+    needs: [build, test, coverage, detect-changes]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.detect-changes.outputs.deployable == 'true'
     runs-on: ubuntu-latest
     steps:
