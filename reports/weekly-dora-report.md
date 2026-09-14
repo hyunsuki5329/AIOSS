@@ -1,7 +1,7 @@
 # Weekly DORA Report
 
-- Generated at: 2026-09-07T03:39:40.674Z
-- Window: last 7 days (2026-08-31T03:39:40.674Z to 2026-09-07T03:39:40.674Z)
+- Generated at: 2026-09-14T04:04:10.400Z
+- Window: last 7 days (2026-09-07T04:04:10.400Z to 2026-09-14T04:04:10.400Z)
 
 ## DORA 4 Metrics
 
